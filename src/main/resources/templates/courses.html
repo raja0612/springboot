@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html  xmlns="http://www.w.org//xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<head>
+	   <title>Spring Boot APP</title>
+	   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+	   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" />
+
+
+	   <script type="text/javascript">
+	   $(function(){
+		    // signals jquery fully loaded and ready to rock.
+		     $("#create-course-dialog").dialog({
+		    	 autoOpen :false,
+		    	 title :"Create Course",
+		    	 buttons:{
+		    		 create : function(){
+			    		$("#createCourseForm").submit();
+			    		$("#create-course-dialog").dialog("close");
+			    	 },
+			        cancel :function(){
+			        	  $("#create-course-dialog").dialog("close");
+			          }
+		    	 },
+		    	 close:function(){
+		    		 $("#create-course-dialog").dialog("close");
+		    	 }
+		    	 
+		     });
+		    
+		     $("#createCourse").click(function(){
+		    	  $("#create-course-dialog").dialog("open");
+		     });
+		   
+	   });
+	   
+	   </script>
+	</head>
+	<body>
+	<div class="container">
+	  <!-- Below div will be replaced by Thymeleaf header.html code when sever is running -->
+	    <div th:replace = "fragments/header :: header"></div>
+	    
+	    
+	  <h1 th:text = "${'CourseWare Application Version 1.0.0'}">Welcome to Spring boot Application</h1>
+	  
+     <div th:each = "course : ${courseList}" th:object= "${course}">
+       <a th:href="${'courses/edit/' + {course.courseId}}"><span th:text="${course.courseName}"> this text will replace by course name</span> </a>
+     </div>    
+	  <br/>
+	   <button class ="btn btn-sucess" id= "createCourse">Create New Course</button>
+	   <div id = "create-course-dialog">
+		    <form id ="createCourseForm" action="" th:object = "${course}" method="post">
+				    <fieldset>
+				       Course Name : <input  type= "text" th:field= "${course.courseName}"/>
+				    </fieldset>
+		    </form>
+	   </div>
+	   
+	   <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	
+	</div>
+	</body>
+</html>

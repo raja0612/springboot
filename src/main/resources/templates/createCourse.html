@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html  xmlns="http://www.w.org//xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+	<head>
+	   <title>New Course Creation Form</title>
+	   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" />
+
+
+	</head>
+	<body>
+	<div class="container">
+	  <!-- Below div will be replaced by Thymeleaf header.html code when sever is running -->
+	    <div th:replace = "fragments/header :: header"></div>
+	  <h1>Welcome to Course Creation Form</h1>
+	    <form th:action = "${createCourse}" th:object ="${course}" method = "post">
+	        Course Name : <input type="text"  th:field="${course.courseName}"/> <br/><br/>
+	        <button class= "btn btn-sucess">Create Course</button>
+	    </form>
+	  <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	</div>
+	</body>
+</html>

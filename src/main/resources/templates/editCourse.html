@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html  xmlns="http://www.w.org//xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+       <head>
+	       <title>Edit Course</title>
+	   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+	   
+	   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" />
+
+
+	   <script th:inline= "javascript">
+	   /*<![CDATA[*/
+
+	    var courseId =   /*[[${course.courseId}]]*/ '1';
+	   
+	   var sectionId = 0;
+	   console.log('courseId...'+courseId);
+	  
+	   
+	   $(function(){
+		    $("button[id^='createLesson']").click(function(){
+		    	 sectionId = $(this).attr("id");
+		    	 sectionId = sectionId.split("createLesson"); 
+		    	 sectionId = sectionId[1];
+		    	 
+		    	 $("#create-lesson-form").dialog("open");
+		    	 /* alert("You clicked the button"+$(this).attr("id")); */
+		    	/*  alert(strSplit[1]); */
+		    })
+		   
+		   $("#create-lesson-form").dialog({
+		    	 autoOpen :false,
+		    	 title :"Create Lesson",
+		    	 buttons:{
+		    		 create : function(){
+			    	   $.ajax({
+			    			url: "createLesson",
+			    			type: "post",
+			    			data: {"courseId" : courseId,"sectionId" : sectionId,"lessonNumber" : $("#lessonNumber").val(), "lessonName" :$("#lessonName").val()},
+			    			sucess: function(data){
+			    				window.location.reload(true); 
+			    			},
+			    			error: function(){
+			    				console.log("There was an error");
+			    			},
+			    		}); 
+			    	 },
+			        cancel :function(){
+			        	  $("#create-lesson-form").dialog("close");
+			          }
+		    	 },
+		    	 close:function(){
+		    		 $("#create-lesson-form").dialog("close");
+		    	 }
+		   });
+		   $("#createLesson").click(function(){
+		    	  $("#create-lesson-form").dialog("open");
+		     });
+			
+		   
+		   $("#create-section-form").dialog({
+		    	 autoOpen :false,
+		    	 title :"Create Section",
+		    	 buttons:{
+		    		 create : function(){
+			    	   $.ajax({
+			    			url: "createSection",
+			    			type: "post",
+			    			data: {"courseId" : courseId,"sectionName" : $("#sectionName").val()},
+			    			sucess: function(data){
+			    				   window.location.reload(true);
+			    				
+			    			},
+			    			error: function(){
+			    				console.log("There was an error");
+			    			}
+			    		}); 
+			    	 },
+			        cancel :function(){
+			        	  $("#create-section-form").dialog("close");
+			          }
+		    	 },
+		    	 close:function(){
+		    		 $("#create-section-form").dialog("close");
+		    	 }
+		    	 
+		     });
+		   
+		   $("#createSection").click(function(){
+		    	  $("#create-section-form").dialog("open");
+		     });
+		   
+	   });
+	   /*]]>*/
+	   </script>
+	       
+	  </head>
+	<body>
+	<div class="container">
+	
+	   <!-- Below div will be replaced by Thymeleaf header.html code when sever is running -->
+	    <div th:replace = "fragments/header :: header"></div>
+	    
+	  <!-- <span th:inline="text">Editing-[[${course.courseName}]]</span> -->
+	  <span th:text = "${'Editing....' + {course.courseName}}">Editing Course...</span><br/>
+	  
+	    <button class= "btn btn-danger pull-right">Delete Lesson</button>
+	  
+	   <h1 th:text = "${'List Of Contents.....'}"></h1><br/>
+	 <!--  <span th:text = "${'Section Id'}"></span> -->
+	  <span th:text = "${'Section Name'}"></span>
+	     
+	  <div th:each = "section :${course.sections}" th:object = "${section}">
+				  <fieldset> 
+				      <span th:id= "${'section'+ {section.sectionId}}" th:text = "${section.sectionName}"></span>
+				       <div th:each = "lesson :${section.lessons}" th:object = "${lesson}">
+				        <span th:text = "${'Lesson #'+{lesson.lessonNumber}+'.'+{lesson.lessonName}}"></span>
+				       </div><br/>
+				        <button th:id ="${'createLesson' + {section.sectionId}}">Add Lesson</button>
+				  
+				  </fieldset>
+				<!--   <fieldset> <span th:text = "${section.sectionName}"></span></fieldset> -->
+			  <br/><br/>
+	  </div>
+	  <div th:if = "${sections.isEmpty()}">
+	     There is no Sections to display....
+	  </div>
+ 	  
+	   <div>
+	      <button id ="createSection">Add Section</button>
+	   </div><br/><br/>
+	   
+	  
+	   
+	   <div id = "create-section-form">
+	     <fieldset>
+	        Section Name :<input type="text" id ="sectionName"/>
+	     </fieldset>
+	   </div>
+	   
+	   
+	   <div id = "create-lesson-form">
+	     <fieldset>
+	       Lesson Number :<input type="number" id ="lessonNumber"/><br/>
+	       Lesson Name :<input type="text" id ="lessonName"/>
+	     </fieldset>
+	   </div>
+	   
+	   <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	
+	</div>
+	</body>
+</html>
